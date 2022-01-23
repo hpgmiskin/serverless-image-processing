@@ -1,0 +1,73 @@
+@startuml
+
+skinparam Shadowing false
+
+participant "Client" as CL
+participant "Request Lambda" as RL
+participant "Processing Lambda" as PL
+database "DynamoDB" as DD
+database "Input Images" as II
+database "Processed Images" as PI
+
+== Start procesing ==
+
+CL -> RL: Create process
+activate RL
+RL -> DD: Store process index
+activate DD
+DD -> RL: Process index stored
+deactivate DD
+RL -> RL: Sign upload URL
+RL -> CL: Process ID and signed URL 
+deactivate RL
+
+CL -> II: Upload request
+activate II
+II -> CL: Upload complete
+
+== Process image ==
+
+II -> PL: Put object event
+deactivate II
+activate PL
+PL -> PL: Process image
+PL -> PI: Store processed image
+activate PI
+PL -> DD: Update index
+activate DD
+DD -> PL: Index updated
+deactivate DD
+deactivate PL
+
+== Monitor process ==
+
+alt If process running
+
+CL -> RL: Get process
+activate RL
+RL -> DD: Get process
+activate DD
+DD -> RL: Return process
+deactivate DD
+RL -> CL: Return process status
+deactivate RL
+
+else If process complete
+
+CL -> RL: Get process
+activate RL
+RL -> DD: Get process
+activate DD
+DD -> RL: Return process
+deactivate DD
+RL -> RL: Sign download URL
+RL -> CL: Signed download URL
+deactivate RL
+
+CL -> PI: Download request
+PI -> CL: Download image
+deactivate PI
+
+end
+
+@enduml

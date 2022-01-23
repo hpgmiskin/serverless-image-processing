@@ -11,9 +11,12 @@ unique reference to manage the running process. With this reference the client
 can check the processing, each single request would complete in a short amount
 of time.
 
-## Proposed approach
+## AWS technologies
 
-### Discussion of lambda functions
+Given the breadth of available services on AWS it makes sense to discuss a
+serverless approach in terms of AWS services.
+
+### AWS Lambda
 
 An obvious approach is to make use of a lambda function. A lambda function can
 run for up to 15 minutes using fairly powerful compute. A common approach with
@@ -27,16 +30,6 @@ limit fails. For use cases where fire and forget is permissible then lambda can
 be invoked as an event from API Gateway, however, there is no easy way to check
 the status of the image processing.
 
-### Making use of step functions
-
-In order to get past the limitations of a single lambda called through API
-gateway, a step function could be used to manage the state of the data
-processing.
-
-Step functions are low code workflows which manage failures and integrate with
-other services. Lambda functions can be defined as a stage within a step
-function workflow.
-
 ### Challenges
 
 1. Abstract the process behind a simple REST API using API Gateway.
@@ -47,3 +40,12 @@ function workflow.
 
 - AWS Lambda can be invoked with a maximum payload size of 6 MB.
 - Amazon API Gateway has a maximum timeout of 30 seconds.
+
+## Proposed architecture
+
+In order to implement a long running image processing job we will use a
+combination of API Gateway, AWS Lambda, AWS S3 and DynamoDB. The Lambda
+functions can roughly be split into those which service requests and those which
+are used to process images.
+
+![sequence diagram](./assets/sequence.svg)
