@@ -29,3 +29,8 @@ In the above process (2) could take some time to complete.
 
 For more information on the architecture please see
 [architecture.md](./docs/architecture.md).
+
+## Implementation
+
+For the current implementation plan see
+[implementation.md](./docs/implementation.md).

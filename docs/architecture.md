@@ -41,6 +41,9 @@ the status of the image processing.
 - AWS Lambda can be invoked with a maximum payload size of 6 MB.
 - Amazon API Gateway has a maximum timeout of 30 seconds.
 
+For more details see
+[Implementation considerations - Serverless Image Handler](https://docs.aws.amazon.com/solutions/latest/serverless-image-handler/considerations.html).
+
 ## Proposed architecture
 
 In order to implement a long running image processing job we will use a
